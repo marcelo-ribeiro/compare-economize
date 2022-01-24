@@ -1,0 +1,16 @@
+.color--success {
+  color: var(--color-success);
+}
+.color--warning {
+  color: var(--color-success);
+}
+.color--danger {
+  color: var(--color-success);
+}
+.color--primary {
+  color: var(--color-success);
+}
+
+.m-0 {
+  margin: 0;
+}
