@@ -10,6 +10,7 @@
   --color-warning: hsl(50, 50%, 50%);
   --color-danger: hsl(10, 50%, 50%);
   --color-medium: hsl(210, 20%, 50%);
+  --color-light: hsl(210, 20%, 95%);
   --color-dark: hsl(210, 25%, 25%);
   --text-color: var(--color-dark);
 
@@ -101,6 +102,12 @@ input {
   padding: 0 0 0.375rem;
 }
 
+fieldset {
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
 .button {
   --background: none;
   --width: auto;
@@ -125,10 +132,14 @@ input {
   --color: #fff;
 }
 .button--icon {
-  --font-size: 1.5rem;
-  --padding: 0;
   --width: 2rem;
   --height: 2rem;
+  --padding: 0;
+  --font-size: 1.5rem;
+  --background: var(--color-light);
+  --border-radius: 50%;
+  --color: var(--color-medium);
+  fill: currentColor;
   line-height: 1;
 }
 .button--icon.button--xsmall {

@@ -307,65 +307,67 @@ const Index = () => {
               </button>
 
               {formData && (
-                <section style={{ padding: ".5rem 0 1rem" }}>
+                <section style={{ padding: 0 }}>
                   <form
-                    style={{ display: "grid", gap: "1rem" }}
+                    style={{ display: "grid", gap: "2rem" }}
                     onSubmit={submitItem}
                   >
-                    {/* <fieldset> */}
-                    <div className="card__row">
-                      <label className="label">Nome</label>
-                      <input
-                        name="name"
-                        type="text"
-                        value={formData.name}
-                        placeholder={`Produto ${formData.id}`}
-                        onChange={changeItem}
-                      />
-                    </div>
-                    <div className="card__row">
-                      <label className="label">Tamanho (kg/m/L)</label>
-                      <input
-                        name="amount"
-                        type="number"
-                        value={formData.amount}
-                        min={1}
-                        step={0.1}
-                        placeholder="1"
-                        required
-                        autoFocus={true}
-                        onChange={changeItem}
-                      />
-                    </div>
-                    <div className="card__row">
-                      <label className="label">Preço R$</label>
-                      <input
-                        name="price"
-                        type="number"
-                        value={formData.price}
-                        min={0.05}
-                        step={0.05}
-                        placeholder="0,00"
-                        required
-                        onChange={changeItem}
-                      />
-                    </div>
-                    <div className="card__row">
-                      <label className="label">Unidades</label>
-                      <input
-                        name="quantity"
-                        type="number"
-                        value={formData.quantity}
-                        min={1}
-                        step={1}
-                        placeholder="1"
-                        required
-                        onChange={changeItem}
-                      />
-                    </div>
-                    {/* </fieldset> */}
+                    <fieldset style={{ display: "grid", gap: "1.5rem" }}>
+                      <div className="card__row">
+                        <label className="label">Marca (opcional)</label>
+                        <input
+                          name="name"
+                          type="text"
+                          value={formData.name}
+                          placeholder={`Produto ${formData.id}`}
+                          onChange={changeItem}
+                        />
+                      </div>
+                      <div className="card__row">
+                        <label className="label">Unidades (opicional)</label>
+                        <input
+                          name="quantity"
+                          type="number"
+                          value={formData.quantity}
+                          min={1}
+                          step={1}
+                          placeholder="Digite a quantidade de unidades do produto"
+                          required
+                          onChange={changeItem}
+                        />
+                      </div>
+                      <div className="card__row">
+                        <label className="label">Volume (kg/m/L)</label>
+                        <input
+                          name="amount"
+                          type="number"
+                          value={formData.amount}
+                          min={1}
+                          step={0.1}
+                          placeholder="Digite o volume, tamanho ou peso do produto"
+                          required
+                          autoFocus={true}
+                          onChange={changeItem}
+                        />
+                      </div>
+                      <div className="card__row">
+                        <label className="label">Preço R$</label>
+                        <input
+                          name="price"
+                          type="number"
+                          value={formData.price}
+                          min={0.05}
+                          step={0.05}
+                          placeholder="0,00"
+                          required
+                          onChange={changeItem}
+                        />
+                      </div>
+                    </fieldset>
 
-                    <button className="button">Adicionar</button>
+                    <button className="button button--primary">
+                      Adicionar produto
+                    </button>
                   </form>
                 </section>
               )}
