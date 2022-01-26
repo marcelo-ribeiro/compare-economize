@@ -215,7 +215,6 @@ const Index = () => {
           <p
             className="container"
             style={{
-              margin: 0,
               color: "var(--color-medium)",
               fontSize: "0.75rem",
             }}
@@ -224,7 +223,7 @@ const Index = () => {
           </p>
         )}
 
-        <div className="cards">
+        <div className="cards container">
           {items?.map((item, index) => (
             <div
               className={`card ${isLowestPrice(item) ? "active" : ""}`}
