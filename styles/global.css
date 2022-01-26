@@ -1,14 +1,22 @@
 :root {
+  --color-primary-hue: 200;
+  --color-primary-hsl: var(--color-primary-hue), 50%, 50%;
+  --color-primary: hsl(var(--color-primary-hsl));
+
   --color-success-hue: 160;
-  --color-success-hsl: 160, 50%, 50%;
-  --color-success: hsl(160, 50%, 50%);
+  --color-success-hsl: var(--color-success-hue), 50%, 50%;
+  --color-success: hsl(var(--color-success-hsl));
+
   --color-warning: hsl(50, 50%, 50%);
   --color-danger: hsl(10, 50%, 50%);
-  --color-primary: var(--color-success);
+  --color-medium: hsl(210, 20%, 50%);
+  --color-dark: hsl(210, 25%, 25%);
+  --text-color: var(--color-dark);
+
+  --font-family: "Poppins", sans-serif;
   --container-padding: 1rem;
   --border-radius: 8px;
-  --text-color: #000c;
-  --background: hsl(230, 20%, 100%);
+  --background: hsl(210, 20%, 100%);
   --box-background: #0001;
   --box-border: #0002;
 }
@@ -21,9 +29,11 @@
 }
 
 html {
-  font: 16px/1.25 sans-serif;
+  font: 16px/1.25 var(--font-family);
   background: var(--background);
   height: 100%;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
@@ -32,6 +42,7 @@ body {
   min-height: 100%;
   display: grid;
   grid-template-rows: 1fr;
+  user-select: none;
 }
 
 :focus {
@@ -44,10 +55,12 @@ h1 {
   font-size: 1rem;
   grid-column: 2;
   text-align: center;
+  color: var(--color-primary);
 }
 
-section:not(:last-child) {
-  margin-bottom: 1.5rem;
+section {
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
 }
 
 p {
@@ -138,29 +151,28 @@ input {
   display: grid;
   gap: 0.75rem;
   padding: 0 var(--container-padding);
-  grid-template-columns: repeat(2, auto);
+  grid-template-columns: repeat(2, 1fr);
 }
 
 .card {
   position: relative;
   display: grid;
-  gap: 0.75rem;
-  padding: 1rem 0;
-  background: hsl(230, 20%, 95%);
+  gap: 0.25rem;
+  padding: 1rem;
+  background: hsl(var(--color-primary-hue), 20%, 95%);
   border: 3px solid transparent;
   border-radius: var(--border-radius);
 }
 
 .card.active {
   border-color: var(--color-success);
-  animation-name: tada;
 }
 
 .card__row {
   display: grid;
   align-items: center;
   gap: 0.25rem;
-  padding-left: 1rem;
+  /* padding-left: 1rem; */
 }
 
 .card__button {
@@ -175,6 +187,7 @@ input {
   gap: 1rem;
   justify-content: space-between;
   align-items: center;
+  min-height: 3rem;
   padding: 0.5rem var(--container-padding);
   /* background: var(--box-background); */
   /* border-bottom: 1px solid var(--box-background); */
