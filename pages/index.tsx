@@ -59,7 +59,6 @@ const Index = () => {
   const submitItem = (event: FormEvent) => {
     event.preventDefault();
     const map = calculate({ ...formData });
-    console.log({ map });
     setItems(map);
     setModalShow(false);
   };
@@ -70,7 +69,7 @@ const Index = () => {
 
     data = {
       ...data,
-      name: data.name || `Produto ${++data.id}`,
+      name: data.name || `Produto ${data.id}`,
       unitPrice: getUnitPrice(data),
     };
 
