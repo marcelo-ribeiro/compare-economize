@@ -77,12 +77,23 @@ const Index = () => {
 
     if (_items.length > 1) {
       _items.sort((a, b) => a.unitPrice - b.unitPrice);
+      console.log({ items1: _items });
+
       _items.forEach((item, index, array) => {
         item.diferrence = getPriceDifference(item, array);
       });
+      console.log({ items2: _items });
     }
 
     return _items;
+  };
+
+  const getPriceDifference = (item: any, array: any) => {
+    const highestItem = [...array].pop();
+    const comparedPrice =
+      item.unitPrice * highestItem.amount * highestItem.quantity;
+    const difference = highestItem.price - comparedPrice;
+    return difference || 0;
   };
 
   const reset = () => {
@@ -93,13 +104,6 @@ const Index = () => {
 
   const hasNoDiferrence = (array: any) => {
     return array?.every((item: any) => item.diferrence === 0);
-  };
-
-  const getPriceDifference = (item: any, array: any) => {
-    const highestItem = [...array].pop();
-    const comparedPrice = highestItem.unitPrice * item.amount * item.quantity;
-    const difference = comparedPrice - item.price;
-    return difference || 0;
   };
 
   const isLowestPrice = (item: any) => {
@@ -253,16 +257,22 @@ const Index = () => {
               <div>{item.amount} kg/m/L</div>
               <div>{formatPrice(item.unitPrice)} kg/m/L</div>
               <div>Preço: {formatPrice(item.price)}</div>
-              {items.length >= 2 && (
-                <div
-                  style={{
-                    textDecoration: item.diferrence === 0 ? "line-through" : "",
-                    color: !!item.diferrence ? "var(--color-success)" : "",
-                    fontWeight: !!item.diferrence ? "700" : "",
-                  }}
-                >
-                  Economia: {formatPrice(item.diferrence)}
-                </div>
+              {!!item.diferrence && (
+                <>
+                  <div
+                    style={{
+                      textDecoration:
+                        item.diferrence === 0 ? "line-through" : "",
+                      color: !!item.diferrence ? "var(--color-success)" : "",
+                      fontWeight: !!item.diferrence ? "700" : "",
+                    }}
+                  >
+                    Economia: {formatPrice(item.diferrence)}
+                  </div>
+                  <div style={{ fontSize: "0.675rem" }}>
+                    (Comparando com o produto mais caro.)
+                  </div>
+                </>
               )}
             </div>
           ))}
