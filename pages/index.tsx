@@ -270,7 +270,7 @@ const Index = () => {
                     Economia: {formatPrice(item.diferrence)}
                   </div>
                   <div style={{ fontSize: "0.675rem" }}>
-                    (Comparando com o produto mais caro.)
+                    (Comparando com o produto mais caro)
                   </div>
                 </>
               )}
