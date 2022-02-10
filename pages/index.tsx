@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { FormEvent, useRef, useState } from "react";
+import { FormEvent, useMemo, useRef, useState } from "react";
 
 const generateId = new (function () {
   let id = 1;
@@ -10,28 +10,29 @@ const generateId = new (function () {
 type TDefaultItem = {
   id: number;
   name: string;
-  price: number;
+  price: number | string;
   amount: number | string;
   quantity: number | string;
   unitPrice?: number;
-  diferrence?: number;
+  difference?: number;
 };
 
 const getDefaultItem = (): TDefaultItem => ({
   id: generateId.get(),
   name: "",
-  price: null,
+  price: "",
   amount: "",
   quantity: 1,
   unitPrice: 0,
-  diferrence: 0,
+  difference: 0,
 });
 
-const formatPrice = (price: number) =>
+const formatPrice = (price: number | string, options?: any) =>
   new Intl.NumberFormat(undefined, {
     style: "currency",
     currency: "BRL",
-  }).format(price);
+    ...options,
+  }).format(parseFloat(price.toString()));
 
 const Index = () => {
   const [items, setItems] = useState<TDefaultItem[]>([]);
@@ -39,6 +40,7 @@ const Index = () => {
   const [isReady, setIsReady] = useState<boolean>(false);
   const [modalShow, setModalShow] = useState<boolean>(false);
   const [formData, setFormData] = useState<TDefaultItem>();
+  const [isEdit, setIsEdit] = useState<boolean>(false);
 
   const addItem = () => {
     setModalShow(true);
@@ -46,7 +48,8 @@ const Index = () => {
     setFormData(data);
   };
 
-  const removeItem = (index: number) => {
+  const removeItem = (event, index: number) => {
+    event.stopPropagation();
     setItems((prev) => prev.filter((item, i) => i !== index));
   };
 
@@ -56,33 +59,41 @@ const Index = () => {
     setFormData((item) => ({ ...item, [name]: newValue }));
   };
 
-  const submitItem = (event: FormEvent) => {
-    event.preventDefault();
-    const map = calculate({ ...formData });
-    setItems(map);
-    setModalShow(false);
+  const editItem = (formData: TDefaultItem) => {
+    setFormData({ ...formData });
+    setModalShow(true);
+    setIsEdit(true);
   };
 
-  const calculate = (data: any) => {
+  const submitItem = (event: FormEvent) => {
+    event.preventDefault();
+    const map: TDefaultItem[] = calculate({ ...formData });
+    setItems(map);
+    setModalShow(false);
+    setIsEdit(false);
+  };
+
+  const calculate = (formData: TDefaultItem): TDefaultItem[] => {
     const getUnitPrice = (item: any) =>
       item.price / (item.amount * item.quantity);
 
-    data = {
-      ...data,
-      name: data.name || `Produto ${data.id}`,
-      unitPrice: getUnitPrice(data),
-    };
+    formData.name = formData.name || `Produto ${formData.id}`;
+    formData.unitPrice = getUnitPrice(formData);
 
-    const _items = items?.length ? [...items, data] : [data];
+    const _items: TDefaultItem[] = (() => {
+      if (isEdit) {
+        return items.map((item) => (item.id === formData.id ? formData : item));
+      } else {
+        return items?.length ? [...items, formData] : [formData];
+      }
+    })();
 
     if (_items.length > 1) {
-      _items.sort((a, b) => a.unitPrice - b.unitPrice);
-      console.log({ items1: _items });
-
-      _items.forEach((item, index, array) => {
-        item.diferrence = getPriceDifference(item, array);
-      });
-      console.log({ items2: _items });
+      _items
+        .sort((a, b) => a.unitPrice - b.unitPrice)
+        .forEach((item, index, array) => {
+          item.difference = getPriceDifference(item, array);
+        });
     }
 
     return _items;
@@ -90,9 +101,11 @@ const Index = () => {
 
   const getPriceDifference = (item: any, array: any) => {
     const highestItem = [...array].pop();
-    const comparedPrice =
-      item.unitPrice * highestItem.amount * highestItem.quantity;
-    const difference = highestItem.price - comparedPrice;
+    // const comparedPrice =
+    //   item.unitPrice * highestItem.amount * highestItem.quantity;
+    const comparedPrice = highestItem.unitPrice * item.amount * item.quantity;
+    // const difference = highestItem.price - comparedPrice;
+    const difference = comparedPrice - item.price;
     return difference || 0;
   };
 
@@ -102,14 +115,18 @@ const Index = () => {
     setIsReady(false);
   };
 
-  const hasNoDiferrence = (array: any) => {
-    return array?.every((item: any) => item.diferrence === 0);
+  const hasNoDiferrence = useMemo(() => {
+    return items?.every((item) => item.difference === 0);
+  }, [items]);
+
+  const isLowestPrice = (item: TDefaultItem) => {
+    if (items?.length < 2 || !item) return false;
+    return item.id === items[0].id;
   };
 
-  const isLowestPrice = (item: any) => {
-    if (!items?.length) return false;
-    console.log({ item, items });
-    return item.id === items[0].id;
+  const isHighestPrice = (item: TDefaultItem) => {
+    if (items?.length < 2 || !item) return false;
+    return item.id === items[items.length - 1].id;
   };
 
   return (
@@ -166,61 +183,47 @@ const Index = () => {
         </nav> */}
       </header>
 
-      {items?.length >= 2 ? (
-        <section
-          className="container"
-          style={{ display: "grid", gap: "0.5rem", textAlign: "center" }}
-        >
-          {hasNoDiferrence([...items]) ? (
-            <h3 className="color--success">
+      <section
+        className="container"
+        style={{ display: "grid", gap: "0.5rem", textAlign: "center" }}
+      >
+        {items?.length >= 2 ? (
+          hasNoDiferrence ? (
+            <h3 className="color--danger">
               Não há diferença de preço entre os produtos.
             </h3>
           ) : (
             <>
               <h3>{items[0].name} é o produto mais barato.</h3>
               <h3 className="color--success">
-                {`Você economizou ${formatPrice(items[0].diferrence)}`}
+                {`Você economizou ${formatPrice(items[0].difference)}`}
               </h3>
             </>
-          )}
-        </section>
-      ) : (
-        <section
-          className="container"
-          style={{
-            display: "grid",
-            gap: "0.5rem",
-            textAlign: "center",
-          }}
-        >
-          {!items.length ? (
-            <>
-              <h3>Não há produtos para comparar.</h3>
-              <div
-                style={{
-                  color: "var(--color-medium)",
-                  fontSize: ".75rem",
-                }}
-              >
-                Clique no botão abaixo para adicionar um ou mais produtos.
-              </div>
-            </>
-          ) : items.length <= 1 ? (
-            <h3>Adicione um ou mais produtos para comparar</h3>
-          ) : (
-            ""
-          )}
-        </section>
-      )}
+          )
+        ) : !items.length ? (
+          <>
+            <h3>Não há produtos para comparar.</h3>
+            <div
+              style={{
+                color: "var(--color-medium)",
+                fontSize: ".75rem",
+              }}
+            >
+              Clique no botão abaixo para adicionar um ou mais produtos.
+            </div>
+          </>
+        ) : items.length <= 1 ? (
+          <h3>Adicione um ou mais produtos para comparar</h3>
+        ) : (
+          ""
+        )}
+      </section>
 
       <section style={{ display: "grid", gap: "1rem" }}>
-        {items?.length >= 2 && (
+        {items?.length >= 2 && !hasNoDiferrence && (
           <p
-            className="container"
-            style={{
-              color: "var(--color-medium)",
-              fontSize: "0.75rem",
-            }}
+            className="container color--medium"
+            style={{ fontSize: "0.75rem" }}
           >
             Ordenado pelo mais barato:
           </p>
@@ -229,9 +232,14 @@ const Index = () => {
         <div className="cards container">
           {items?.map((item, index) => (
             <div
-              className={`card ${isLowestPrice(item) ? "active" : ""}`}
-              style={{ fontSize: "0.875rem" }}
+              className={`
+                card 
+                ${!hasNoDiferrence && isLowestPrice(item) ? "active" : ""}
+                ${!hasNoDiferrence && isHighestPrice(item) ? "danger" : ""}
+              `}
+              style={{ fontSize: "0.75rem" }}
               key={index}
+              onClick={() => editItem(item)}
             >
               <div
                 style={{
@@ -240,46 +248,58 @@ const Index = () => {
                   alignItems: "center",
                 }}
               >
-                <strong>{item.name}</strong>
+                <strong style={{ fontSize: "1rem" }}>{item.name}</strong>
 
                 <button
                   type="button"
                   className="button button--icon button--clear button--xsmall"
                   style={{ color: "var(--color-medium)" }}
-                  onClick={() => removeItem(index)}
+                  onClick={(event) => removeItem(event, index)}
                 >
                   &times;
                 </button>
               </div>
+              <div>{item.amount} kg/m/L</div>
+              <div>
+                {formatPrice(item.unitPrice, { minimumFractionDigits: 4 })} por
+                kg/m/L
+              </div>
               <div>
                 {item.quantity} unidade{item.quantity > 1 && `s`}
               </div>
-              <div>{item.amount} kg/m/L</div>
-              <div>{formatPrice(item.unitPrice)} kg/m/L</div>
               <div>Preço: {formatPrice(item.price)}</div>
-              {!!item.diferrence && (
+              {!!item.difference && (
                 <>
                   <div
                     style={{
-                      textDecoration:
-                        item.diferrence === 0 ? "line-through" : "",
-                      color: !!item.diferrence ? "var(--color-success)" : "",
-                      fontWeight: !!item.diferrence ? "700" : "",
+                      color: "var(--color-success)",
+                      fontWeight: "700",
                     }}
                   >
-                    Economia: {formatPrice(item.diferrence)}
+                    Economia: {formatPrice(item.difference)}
                   </div>
                   <div style={{ fontSize: "0.675rem" }}>
-                    (Comparando com o produto mais caro)
+                    (Comparado ao preço mais caro)
                   </div>
                 </>
+              )}
+              {!hasNoDiferrence && isHighestPrice(item) && (
+                <div
+                  style={{
+                    color: "var(--color-danger)",
+                    fontSize: "0.75rem",
+                    fontWeight: "700",
+                  }}
+                >
+                  Produto mais caro.
+                </div>
               )}
             </div>
           ))}
 
           <div
             onClick={addItem}
-            className="card"
+            className="card center"
             style={{
               alignItems: "center",
               textAlign: "center",

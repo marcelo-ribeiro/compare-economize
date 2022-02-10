@@ -175,15 +175,21 @@ fieldset {
 .card {
   position: relative;
   display: grid;
+  align-content: start;
   gap: 0.25rem;
   padding: 1rem;
   background: hsl(var(--color-primary-hue), 20%, 95%);
   border: 3px solid transparent;
   border-radius: var(--border-radius);
 }
-
+.card.center {
+  place-content: center;
+}
 .card.active {
   border-color: var(--color-success);
+}
+.card.danger {
+  border-color: var(--color-danger);
 }
 
 .card__row {
