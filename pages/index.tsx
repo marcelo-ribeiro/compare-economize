@@ -111,7 +111,7 @@ const Index = () => {
 
   const reset = () => {
     generateId.reset();
-    setItems([]);
+    setItems(null);
     setIsReady(false);
   };
 
@@ -146,7 +146,7 @@ const Index = () => {
           <span style={{ color: "var(--color-success)" }}>Economize</span>
         </h1>
 
-        {!!items.length && (
+        {!!items?.length && (
           <nav style={{ display: "flex", justifyContent: "flex-end" }}>
             <button
               type="button"
