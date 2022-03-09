@@ -5,11 +5,12 @@
   display: grid;
   place-items: center;
   margin: 0;
+  padding: 0;
   overflow: hidden;
-  background: hsl(var(--color-success-hue), 50%, 40%, 0.5);
+  background: hsl(var(--color-primary-hue), 50%, 10%, 0.85);
   opacity: 0;
   visibility: hidden;
-  transition: .25s ease-in-out;
+  transition: 0.25s ease-in-out;
 }
 
 .modal--active {
@@ -21,7 +22,12 @@
   position: relative;
   background: #fff;
   padding: 1.5rem;
-  border-radius: .75rem;
+  border-radius: 0.75rem;
+}
+
+.modal__title {
+  margin-bottom: 1.5rem;
+  text-align: left;
 }
 
 .modal__close-button {

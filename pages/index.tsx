@@ -4,7 +4,7 @@ import { FormEvent, useMemo, useRef, useState } from "react";
 const generateId = new (function () {
   let id = 1;
   this.get = () => id++;
-  this.reset = () => (id = 0);
+  this.reset = () => (id = 1);
 })();
 
 type TDefaultItem = {
@@ -41,6 +41,12 @@ const Index = () => {
   const [modalShow, setModalShow] = useState<boolean>(false);
   const [formData, setFormData] = useState<TDefaultItem>();
   const [isEdit, setIsEdit] = useState<boolean>(false);
+
+  const reset = () => {
+    generateId.reset();
+    setItems(null);
+    setIsReady(false);
+  };
 
   const addItem = () => {
     setModalShow(true);
@@ -107,12 +113,6 @@ const Index = () => {
     // const difference = highestItem.price - comparedPrice;
     const difference = comparedPrice - item.price;
     return difference || 0;
-  };
-
-  const reset = () => {
-    generateId.reset();
-    setItems(null);
-    setIsReady(false);
   };
 
   const hasNoDiferrence = useMemo(() => {
@@ -200,7 +200,7 @@ const Index = () => {
               </h3>
             </>
           )
-        ) : !items.length ? (
+        ) : !items?.length ? (
           <>
             <h3>Não há produtos para comparar.</h3>
             <div
@@ -334,6 +334,8 @@ const Index = () => {
                 &times;
               </button>
 
+              <h1 className="modal__title">Adicionar produto</h1>
+
               {formData && (
                 <section style={{ padding: 0 }}>
                   <form
@@ -372,7 +374,7 @@ const Index = () => {
                           value={formData.amount}
                           min={1}
                           step={0.1}
-                          placeholder="Digite o volume, tamanho ou peso do produto"
+                          placeholder="Volume, tamanho ou peso do produto"
                           required
                           autoFocus={true}
                           onChange={changeItem}
@@ -385,7 +387,7 @@ const Index = () => {
                           type="number"
                           value={formData.price}
                           min={0.05}
-                          step={0.05}
+                          step={0.01}
                           placeholder="0,00"
                           required
                           onChange={changeItem}
