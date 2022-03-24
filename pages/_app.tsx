@@ -4,10 +4,6 @@ import "../styles/modal.css";
 import "../styles/utils.css";
 
 export default function MyApp({ Component, pageProps }) {
-  if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("/sw.js");
-  }
-
   return (
     <>
       <Head>
