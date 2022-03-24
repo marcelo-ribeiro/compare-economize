@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { FormEvent, useMemo, useRef, useState } from "react";
+import { FormEvent, useMemo, useState } from "react";
 
 const generateId = new (function () {
   let id = 1;
@@ -132,7 +132,7 @@ const Index = () => {
   return (
     <main>
       <Head>
-        <title>Compare preços</title>
+        <title>Compare Economize</title>
         <meta name="viewport" content="width=device-width, user-scalable=no" />
         <link
           href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap"
