@@ -1,4 +1,3 @@
-import Head from "next/head";
 import { FormEvent, useMemo, useState } from "react";
 
 const generateId = new (function () {
@@ -131,15 +130,6 @@ const Index = () => {
 
   return (
     <main>
-      <Head>
-        <title>Compare Economize</title>
-        <meta name="viewport" content="width=device-width, user-scalable=no" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap"
-          rel="stylesheet"
-        />
-      </Head>
-
       <header className="app-header">
         <h1>
           Compare
@@ -189,9 +179,9 @@ const Index = () => {
       >
         {items?.length >= 2 ? (
           hasNoDiferrence ? (
-            <h3 className="color--danger">
+            <h2 className="color--danger">
               Não há diferença de preço entre os produtos.
-            </h3>
+            </h2>
           ) : (
             <>
               <h3>{items[0].name} é o produto mais barato.</h3>
