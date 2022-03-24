@@ -1,3 +1,4 @@
+import Head from "next/head";
 import "../styles/global.css";
 import "../styles/modal.css";
 import "../styles/utils.css";
