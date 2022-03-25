@@ -184,10 +184,10 @@ const Index = () => {
             </h2>
           ) : (
             <>
-              <h3>{items[0].name} é o produto mais barato.</h3>
-              <h3 className="color--success">
+              <h2>{items[0].name} é o produto mais barato.</h2>
+              <h2 className="color--success">
                 {`Você economizou ${formatPrice(items[0].difference)}`}
-              </h3>
+              </h2>
             </>
           )
         ) : !items?.length ? (
