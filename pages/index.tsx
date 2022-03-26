@@ -213,7 +213,7 @@ const Index = () => {
         {items?.length >= 2 && !hasNoDiferrence && (
           <p
             className="container color--medium"
-            style={{ fontSize: "0.75rem" }}
+            style={{ fontSize: "0.875rem" }}
           >
             Ordenado pelo mais barato:
           </p>
