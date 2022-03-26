@@ -16,8 +16,8 @@ type TDefaultItem = {
   difference?: number;
 };
 
-const getDefaultItem = (): TDefaultItem => ({
-  id: generateId.get(),
+const getDefaultItem = (items = []): TDefaultItem => ({
+  id: items.length + 1,
   name: "",
   price: "",
   amount: "",
@@ -27,7 +27,7 @@ const getDefaultItem = (): TDefaultItem => ({
 });
 
 const formatPrice = (price: number | string, options?: any) =>
-  new Intl.NumberFormat(undefined, {
+  new Intl.NumberFormat(navigator.language, {
     style: "currency",
     currency: "BRL",
     ...options,
@@ -42,14 +42,14 @@ const Index = () => {
   const [isEdit, setIsEdit] = useState<boolean>(false);
 
   const reset = () => {
-    generateId.reset();
+    // generateId.reset();
     setItems(null);
     setIsReady(false);
   };
 
   const addItem = () => {
     setModalShow(true);
-    const data = getDefaultItem();
+    const data = getDefaultItem(items);
     setFormData(data);
   };
 
@@ -82,7 +82,7 @@ const Index = () => {
     const getUnitPrice = (item: any) =>
       item.price / (item.amount * item.quantity);
 
-    formData.name = formData.name || `Produto ${formData.id}`;
+    // formData.name = formData.name || `Produto ${items.length + 1}`;
     formData.unitPrice = getUnitPrice(formData);
 
     const _items: TDefaultItem[] = (() => {
@@ -186,7 +186,7 @@ const Index = () => {
             <>
               <h2>{items[0].name} é o produto mais barato.</h2>
               <h2 className="color--success">
-                {`Você economizou ${formatPrice(items[0].difference)}`}
+                {`Economia de ${formatPrice(items[0].difference)}`}
               </h2>
             </>
           )
@@ -238,7 +238,9 @@ const Index = () => {
                   alignItems: "center",
                 }}
               >
-                <strong style={{ fontSize: "1rem" }}>{item.name}</strong>
+                <strong style={{ fontSize: "1rem" }}>
+                  {item.name || `Produto ${items.length}`}
+                </strong>
 
                 <button
                   type="button"
