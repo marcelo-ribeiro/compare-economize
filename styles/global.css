@@ -10,16 +10,22 @@
   --color-warning: hsl(50, 50%, 50%);
   --color-danger: hsl(10, 50%, 50%);
   --color-medium: hsl(var(--color-primary-hue), 20%, 50%);
-  --color-light: hsl(var(--color-primary-hue), 20%, 95%);
+  --color-medium-tint: hsl(var(--color-primary-hue), 20%, 55%);
+  --color-medium-shade: hsl(var(--color-primary-hue), 20%, 45%);
+  --color-light: hsl(var(--color-primary-hue), 20%, 90%);
+  --color-light-tint: hsl(var(--color-primary-hue), 20%, 95%);
+  --color-light-shade: hsl(var(--color-primary-hue), 20%, 85%);
   --color-dark: hsl(var(--color-primary-hue), 25%, 25%);
   --text-color: var(--color-dark);
 
-  --font-family: "Poppins", sans-serif;
-  --container-padding: 1rem;
-  --border-radius: 8px;
-  --background: hsl(var(--color-primary-hue), 20%, 97.5%);
+  --background: var(--color-light-tint);
   --box-background: #0001;
   --box-border: #0002;
+
+  --font-family: "Poppins", sans-serif;
+
+  --container-padding: 1rem;
+  --border-radius: 0.5rem;
 }
 
 * {
@@ -59,9 +65,15 @@ h1 {
   color: var(--color-primary);
 }
 
+h2 {
+  margin: 0;
+  font-weight: 700;
+  font-size: 1.25rem;
+}
+
 section {
-  padding-top: 1.25rem;
-  padding-bottom: 1.25rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
 }
 
 p {
@@ -182,7 +194,7 @@ fieldset {
   gap: 0.25rem;
   padding: 0.75rem;
   background: #fff;
-  border: 3px solid hsl(var(--color-primary-hue), 20%, 90%);
+  border: 3px solid var(--color-light-shade);
   border-radius: var(--border-radius);
 }
 .card.center {

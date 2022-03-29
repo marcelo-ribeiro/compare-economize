@@ -1,3 +1,4 @@
+import Head from "next/head";
 import { FormEvent, useMemo, useState } from "react";
 
 const generateId = new (function () {
@@ -43,7 +44,7 @@ const Index = () => {
 
   const reset = () => {
     // generateId.reset();
-    setItems(null);
+    setItems([]);
     setIsReady(false);
   };
 
@@ -82,7 +83,7 @@ const Index = () => {
     const getUnitPrice = (item: any) =>
       item.price / (item.amount * item.quantity);
 
-    // formData.name = formData.name || `Produto ${items.length + 1}`;
+    formData.name = formData.name || `Produto ${formData.id}`;
     formData.unitPrice = getUnitPrice(formData);
 
     const _items: TDefaultItem[] = (() => {
@@ -130,6 +131,9 @@ const Index = () => {
 
   return (
     <main>
+      <Head>
+        <title>Compare Economize</title>
+      </Head>
       <header className="app-header">
         <h1>
           Compare
@@ -192,7 +196,7 @@ const Index = () => {
           )
         ) : !items?.length ? (
           <>
-            <h3>Não há produtos para comparar.</h3>
+            <h2>Não há produtos para comparar.</h2>
             <div
               style={{
                 color: "var(--color-medium)",
@@ -203,7 +207,7 @@ const Index = () => {
             </div>
           </>
         ) : items.length <= 1 ? (
-          <h3>Adicione um ou mais produtos para comparar</h3>
+          <h2>Adicione um ou mais produtos para comparar</h2>
         ) : (
           ""
         )}
@@ -238,9 +242,7 @@ const Index = () => {
                   alignItems: "center",
                 }}
               >
-                <strong style={{ fontSize: "1rem" }}>
-                  {item.name || `Produto ${items.length}`}
-                </strong>
+                <strong style={{ fontSize: "1rem" }}>{item.name}</strong>
 
                 <button
                   type="button"
@@ -270,8 +272,13 @@ const Index = () => {
                   >
                     Economia: {formatPrice(item.difference)}
                   </div>
-                  <div style={{ fontSize: "0.675rem" }}>
-                    (Comparado ao preço mais caro)
+                  <div
+                    style={{
+                      fontSize: "0.675rem",
+                      color: "var(--color-medium)",
+                    }}
+                  >
+                    *Comparado ao produto mais caro.
                   </div>
                 </>
               )}
